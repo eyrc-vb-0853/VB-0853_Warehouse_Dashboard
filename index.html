@@ -2,6 +2,19 @@
 <html>
 <head>
     <title>Vargi-Bots</title>
+
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""
+  	/>
+
+  	<script
+    src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""
+  	></script>
 </head>
 <header>
     <center>
@@ -12,63 +25,71 @@
     </center>
 </header>
 <body>
-    <center><h2>VB#0853 Dashboard Module 2</h2></center>
-        <hr style="height:4px;border-width:0;color:gray;background-color:gray">
-   	
-   		<center><table id="table1" border='1'>
-            <tr>
-                <th>Order ID</th>
-                <th>Item</th>
-                <th>Priority</th>
-                <th>Quantity</th>
-                <th>City</th>
-            </tr>
-            <tbody id="tableContent">
-            </tbody>
-        </table></center>
+    <center><h2>VB#0853 Dashboard Module 3</h2></center>
 
-        <hr style="height:4px;border-width:0;color:gray;background-color:gray">
-
+    <div id="map" style="height: 380px"></div>
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
 <script>
     /////////////Ajax Requests////////////
     $(document).ready(function() {
-        // Fetch the initial table
-        refreshTable();
+        // Fetch the initial Map
+        refreshMap();
     
-        // Fetch every 1 second
-        setInterval(refreshTable, 1000);
+        // Fetch every 5 second
+        setInterval(refreshMap, 5000);
     });
-    
-    function refreshTable(){
-        
-        // var trHTML = '';	    
-        
+
+    function refreshMap(){
+        var container = L.DomUtil.get('map');
+
+      	if(container != null){
+        container._leaflet_id = null;
+        }
+         
+        var map = L.map('map').setView([20.5937, 78.9629], 4);
+        var jsonDataObject =[];
+
         $.getJSON('YOUR JSON ENDPOINT', function(data) {
-        	
-            	var trHTML = '';
+        for (var i = 0; i < data.feed.entry.length; ++i) {
 
-            	for (var i = 0; i < data.feed.entry.length; ++i) {
-                	var myData_map, myData_order;
+            var json_data = {
+                "City": data.feed.entry[i].gsx$city.$t,
+                "OderID" : data.feed.entry[i].gsx$orderid.$t,
+                "Item" : data.feed.entry[i].gsx$item.$t,
+                "Latitude": parseFloat(data.feed.entry[i].gsx$latitude.$t),
+                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t)
+            };
+            jsonDataObject.push(json_data);
+                
+            for (var j = 0; j < jsonDataObject.length; j++) {
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)));
+                marker.bindPopup(jsonDataObject[j].City, {
+                        autoClose: false
+                });
+                map.addLayer(marker);
+                marker.on('click', onClick_Marker)
+                // Attach the corresponding JSON data to your marker:
+                marker.myJsonData =jsonDataObject[j];
+        
+                function onClick_Marker(e) {
+                        var marker = e.target;
+                        popup = L.popup()
+                        .setLatLng(marker.getLatLng())
+                        .setContent("Order ID: " + marker.myJsonData.OderID + " || Item: " +   marker.myJsonData.Item)
+                        .openOn(map);
+                    }
 
-                    trHTML += '<tr><td>' + data.feed.entry[i].gsx$orderid.$t + 
-                        	  '</td><td>' + data.feed.entry[i].gsx$item.$t + 
-                        	  '</td><td>' + data.feed.entry[i].gsx$priority.$t + 
-                        	  '</td><td>' + data.feed.entry[i].gsx$quantity.$t + 
-                        	  '</td><td>'  + data.feed.entry[i].gsx$city.$t + 
-                        	  '</td></tr>';
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map); 
+                    
 
                 }
+            }
+        });
+    }
 
-                console.log(trHTML);
-        		$('#tableContent').html(trHTML);
-        		var trHTML = '';
-
-        	});	 
-    }	
-    
 </script>
 </html>
