@@ -1,95 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Vargi-Bots</title>
-
-    <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin=""
-  	/>
-
-  	<script
-    src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin=""
-  	></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <header>
-    <center>
-        <div id="eyantraLogo">
-            <!-- eyantra logo -->
-            <img src="https://eyic.e-yantra.org/img/eYantra_logo_whitetext.png" alt="e_yantra_logo" width="290" height="60"><br>
-        </div>
-    </center>
+  <center>
+    <div id="eyantraLogo">
+      <!-- eyantra logo -->
+      <img src="https://eyic.e-yantra.org/img/eYantra_logo_whitetext.png" alt="e_yantra_logo" width="290" height="60"><br>
+    </div>
+  </center>
 </header>
 <body>
-    <center><h2>VB#0853 Dashboard Module 3</h2></center>
-
-    <div id="map" style="height: 380px"></div>
+  <div id="column_chart" style="width: 100%; height: 400px;"></div>
 </body>
+<script type="text/javascript">
+  $(document).ready(function() {
+    // Fetch the initial Chart
+    refreshChart();
+    // Fetch every 5 second
+    setInterval(refreshChart, 5000);
+  });
+  google.charts.load("current", {packages:['corechart']});
+  google.charts.setOnLoadCallback(refreshChart);
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script>
-    /////////////Ajax Requests////////////
-    $(document).ready(function() {
-        // Fetch the initial Map
-        refreshMap();
+  function refreshChart(){
+    var jsonDataObject =[];
+    var graph_arr = [['Order ID', 'Time Taken', { role: 'style' }]];
+    var bar_color = [];
+    $.getJSON('https://spreadsheets.google.com/feeds/list/1JIVYb6vnElB7WdpgeqTUZ_MW5d-4Wd8VHglBEz4JNHY/1/public/full?alt=json', function(data) {
+      for (var i = 0; i < data.feed.entry.length; ++i) {
+        var json_data = {
+          "OderID" : data.feed.entry[i].gsx$orderid.$t,
+          "TimeTaken": parseFloat(data.feed.entry[i].gsx$timetaken.$t),
+          "Priority": data.feed.entry[i].gsx$priority.$t
+          };
+          jsonDataObject.push(json_data);
+      };
+      // Setting color for the coloumns of graph according to priority of items
+      for(var j in jsonDataObject){
+        if(jsonDataObject[j].Priority == 'HP'){
+          var color =  '#FF0000';
+          }
+        else if(jsonDataObject[j].Priority == 'MP'){
+          var color =  '#FFFF00';
+          }
+        else if(jsonDataObject[j].Priority == 'LP'){
+          var color =  '#00FF00';
+          }
+        bar_color.push(color)
+      }
+
+      // Converting Json Object to JavaScript Array
+      for(var j in jsonDataObject){
+          graph_arr.push([jsonDataObject[j].OderID,jsonDataObject[j].TimeTaken, bar_color[j]]);
+      }
+      var graphArray_Final = google.visualization.arrayToDataTable(graph_arr);
     
-        // Fetch every 5 second
-        setInterval(refreshMap, 5000);
-    });
+      var data = new google.visualization.DataView(graphArray_Final); 
 
-    function refreshMap(){
-        var container = L.DomUtil.get('map');
-
-      	if(container != null){
-        container._leaflet_id = null;
-        }
-         
-        var map = L.map('map').setView([20.5937, 78.9629], 4);
-        var jsonDataObject =[];
-
-        $.getJSON('https://spreadsheets.google.com/feeds/list/1JIVYb6vnElB7WdpgeqTUZ_MW5d-4Wd8VHglBEz4JNHY/1/public/full?alt=json', function(data) {
-        for (var i = 0; i < data.feed.entry.length; ++i) {
-
-            var json_data = {
-                "City": data.feed.entry[i].gsx$city.$t,
-                "OderID" : data.feed.entry[i].gsx$orderid.$t,
-                "Item" : data.feed.entry[i].gsx$item.$t,
-                "Latitude": parseFloat(data.feed.entry[i].gsx$latitude.$t),
-                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t)
-            };
-            jsonDataObject.push(json_data);
-                
-            for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)));
-                marker.bindPopup(jsonDataObject[j].City, {
-                        autoClose: false
-                });
-                map.addLayer(marker);
-                marker.on('click', onClick_Marker)
-                // Attach the corresponding JSON data to your marker:
-                marker.myJsonData =jsonDataObject[j];
-        
-                function onClick_Marker(e) {
-                        var marker = e.target;
-                        popup = L.popup()
-                        .setLatLng(marker.getLatLng())
-                        .setContent("Order ID: " + marker.myJsonData.OderID + " || Item: " +   marker.myJsonData.Item)
-                        .openOn(map);
-                    }
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map); 
-                    
-
-                }
-            }
-        });
-    }
-
+      var options = {
+        title: 'Time Taken for items to be Shipped',
+        hAxis: { title: 'Order ID'},
+        vAxis: { title: 'Time Taken (s)'},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById('column_chart'));
+      chart.draw(data, options);
+    });	 
+  }
 </script>
 </html>
