@@ -24,10 +24,11 @@
         </div>
     </center>
 </header>
-<body>
-    <center><h2>VB#0853 Warehouse Dashboard</h2></center>
-
-    <div id="map" style="height: 380px"></div>
+<body background='https://images.squarespace-cdn.com/content/v1/59394df0bf629afcc7dd4bed/1503010573168-1QPOBHEAAWP6SN9I6WI6/ke17ZwdGBToddI8pDm48kB2qThcsGo8KlX0xCX5xL817gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UR_7C_D3iolpcC0vupphd7yaHSDrJLrfe7gK9DncrfuhhbgHIlOZnMbp8Juz_4NGyw/CircuitBackground_DARK.jpg'>
+    <center>
+		<h1 style="color:grey;">VB#0853 Warehouse Dashboard</h1>
+		<div id="map" style="width: 90%; height: 500px"></div>
+	</center>
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -77,7 +78,7 @@
                         var marker = e.target;
                         popup = L.popup()
                         .setLatLng(marker.getLatLng())
-                        .setContent("Order ID: " + marker.myJsonData.OderID + " || Item: " +   marker.myJsonData.Item)
+                        .setContent("<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + marker.myJsonData.City +"</b>"+ "<b><br>Order ID: </b>" + marker.myJsonData.OderID + "<b><br>Item: </b>" +   marker.myJsonData.Item)
                         .openOn(map);
                     }
 
@@ -92,16 +93,17 @@
     }
 
 </script>
-</html>
+<br><br><br><br>
 
-<!DOCTYPE html>
-<html>
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
-  <div id="column_chart" style="width: 100%; height: 400px;"></div>
+	<center>
+		<h2 style="color:white;"><u><b>Shipping Time Graph</b></u></h2>
+		<div id="column_chart" style="width: 90%; height: 400px;"></div>
+	</center>
 </body>
 <script type="text/javascript">
   $(document).ready(function() {
@@ -159,16 +161,16 @@
     });	 
   }
 </script>
-</html>
+<br><br><br><br>
 
-<!DOCTYPE html>
-<html>
 <head>
     <title>Vargi-Bots</title>
 </head>
 <body>
-   		<center><table id="table1" border='1'>
-            <tr>
+   		<center>
+		<h2 style="color:white;"><u><b>Order Table</b></u></h2>
+		<table id="table1" border='20'style="width: 90%; height: 180px;">
+			<tr style="color:white;">
                 <th>Order ID</th>
                 <th>Item</th>
                 <th>Priority</th>
@@ -179,7 +181,7 @@
             </tbody>
         </table></center>
 
-        <hr style="height:4px;border-width:0;color:gray;background-color:gray">
+        <hr style="height:5px;border-width:5;color:yellow;background-color:red">
 
 </body>
 
@@ -206,7 +208,7 @@
             	for (var i = 0; i < data.feed.entry.length; ++i) {
                 	var myData_map, myData_order;
 
-                    trHTML += '<tr><td>' + data.feed.entry[i].gsx$orderid.$t + 
+                    trHTML += '<tr style="color:white;"><td>' + data.feed.entry[i].gsx$orderid.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$item.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$priority.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$quantity.$t + 
