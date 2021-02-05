@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Vargi-Bots</title>
@@ -90,14 +90,15 @@
             jsonDataObject.push(json_data);
                 
             for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{icon:  	if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
-           return redIcon;
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{
+                    if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
+           icon: redIcon;
           }
         else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
-          return yellowIcon;
+          icon : yellowIcon;
           }
         else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
-          return greenIcon;
+          icon : greenIcon;
           }});
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
