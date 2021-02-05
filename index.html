@@ -180,6 +180,8 @@
                 <th>Priority</th>
                 <th>Quantity</th>
                 <th>City</th>
+		<th>Dispatched</th>
+		<th>Shipped</th>		
             </tr>
             <tbody id="tableContent">
             </tbody>
@@ -216,7 +218,9 @@
                         	  '</td><td>' + data.feed.entry[i].gsx$item.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$priority.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$quantity.$t + 
-                        	  '</td><td>'  + data.feed.entry[i].gsx$city.$t + 
+                        	  '</td><td>'  + data.feed.entry[i].gsx$city.$t +
+			          '</td><td>'  + data.feed.entry[i].gsx$Orderdispatched.$t +
+			          '</td><td>'  + data.feed.entry[i].gsx$Ordershipped.$t +
                         	  '</td></tr>';
 
                 }
