@@ -90,16 +90,7 @@
             jsonDataObject.push(json_data);
                 
             for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{
-                    if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
-           icon: redIcon;
-          }
-        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
-          icon : yellowIcon;
-          }
-        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
-          icon : greenIcon;
-          }});
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)));
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
                 });
