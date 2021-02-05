@@ -66,7 +66,7 @@ var redIcon = new L.Icon({
 	shadowSize: [41, 41]
 });
 
-    function give_icon(){
+    function give_i(){
     
       if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
            return redIcon;
@@ -107,7 +107,7 @@ var redIcon = new L.Icon({
             jsonDataObject.push(json_data);
                 
             for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)));
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),icon:give_i());
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
                 });
