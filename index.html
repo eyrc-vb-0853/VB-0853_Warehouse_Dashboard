@@ -123,7 +123,7 @@
     var jsonDataObject =[];
     var graph_arr = [['Order ID', 'Time Taken', { role: 'style' }]];
     var bar_color = [];
-    $.getJSON('https://spreadsheets.google.com/feeds/list/1zWy7X9VkwPYFpyQpJbS0bbLjtGWcHVMt7v-PyX5gYfk/1/public/full?alt=json', function(data) {
+    $.getJSON('https://docs.google.com/spreadsheets/d/e/2PACX-1vS_af-vAnLP0f1C1FXc3IWnVzXHfY7irR8H14R2Rn7aBtsY8ZbUg4pDqjxsdhWeT_HU80OHF7t4AcNP/pubhtml', function(data) {
       for (var i = 0; i < data.feed.entry.length; ++i) {
         var json_data = {
           "OderID" : data.feed.entry[i].gsx$orderid.$t,
