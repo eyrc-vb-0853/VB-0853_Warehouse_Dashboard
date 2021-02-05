@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
     <title>Vargi-Bots</title>
@@ -44,7 +44,30 @@
 
     function refreshMap(){
         var container = L.DomUtil.get('map');
+        var redIcon = new L.Icon({
+	 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+         iconSize: [25, 41],
+	 iconAnchor: [12, 41],
+	 shadowSize: [41, 41]
+        });
 
+        var greenIcon = new L.Icon({
+	 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+         iconSize: [25, 41],
+	 iconAnchor: [12, 41],
+	 shadowSize: [41, 41]
+});
+
+       var yellowIcon = new L.Icon({
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
       	if(container != null){
         container._leaflet_id = null;
         }
@@ -60,12 +83,22 @@
                 "OderID" : data.feed.entry[i].gsx$orderid.$t,
                 "Item" : data.feed.entry[i].gsx$item.$t,
                 "Latitude": parseFloat(data.feed.entry[i].gsx$latitude.$t),
-                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t)
+                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t),
+                "Dispatched": data.feed.entry[i].gsx$Dispatched.$t,
+                "Shipped": data.feed.entry[i].gsx$Shipped.$t
             };
             jsonDataObject.push(json_data);
                 
             for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)));
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{icon:  	if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
+           return redIcon;
+          }
+        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
+          return yellowIcon;
+          }
+        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
+          return greenIcon;
+          }});
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
                 });
