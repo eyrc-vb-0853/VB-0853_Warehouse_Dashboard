@@ -107,7 +107,7 @@ var redIcon = new L.Icon({
             jsonDataObject.push(json_data);
                 
             for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),icon:give_icon());
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)));
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
                 });
