@@ -26,7 +26,7 @@
 </header>a
 <body background='https://images.squarespace-cdn.com/content/v1/59394df0bf629afcc7dd4bed/1503010573168-1QPOBHEAAWP6SN9I6WI6/ke17ZwdGBToddI8pDm48kB2qThcsGo8KlX0xCX5xL817gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UR_7C_D3iolpcC0vupphd7yaHSDrJLrfe7gK9DncrfuhhbgHIlOZnMbp8Juz_4NGyw/CircuitBackground_DARK.jpg'>
     <center>
-		<h1 style="color:grey;">VB#0853 Warehouse Dashboard</h1>
+		<h1 style="color:red;">VB#0853 Warehouse Dashboard</h1>
 		<div id="map" style="width: 90%; height: 500px"></div>
 	</center>
 </body>
@@ -41,10 +41,36 @@
         // Fetch every 5 second
         setInterval(refreshMap, 5000);
     });
+    
+var redIcon = new L.Icon({
+	 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+         iconSize: [25, 41],
+	 iconAnchor: [12, 41],
+	 shadowSize: [41, 41]
+        });
+
+var greenIcon = new L.Icon({
+	 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+         iconSize: [25, 41],
+	 iconAnchor: [12, 41],
+	 shadowSize: [41, 41]
+});
+
+var yellowIcon = new L.Icon({
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+    
 
 
 
-    function refreshMap(){
+       function refreshMap(){
         var container = L.DomUtil.get('map');
 
       	if(container != null){
@@ -54,7 +80,13 @@
         var map = L.map('map').setView([20.5937, 78.9629], 4);
         var jsonDataObject =[];
 
+       
         $.getJSON('https://spreadsheets.google.com/feeds/list/1zWy7X9VkwPYFpyQpJbS0bbLjtGWcHVMt7v-PyX5gYfk/1/public/full?alt=json', function(data) {
+    function give_i(jsonDataObject){
+    
+      
+
+}
         for (var i = 0; i < data.feed.entry.length; ++i) {
 
             var json_data = {
@@ -62,14 +94,25 @@
                 "OderID" : data.feed.entry[i].gsx$orderid.$t,
                 "Item" : data.feed.entry[i].gsx$item.$t,
                 "Latitude": parseFloat(data.feed.entry[i].gsx$latitude.$t),
-                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t)
-                "Dispatched": data.feed.entry[i].gsx$Orderdispatched.$t,
-                "Shipped": data.feed.entry[i].gsx$Ordershipped.$t
+                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t),
+                 "Dispatched": data.feed.entry[i].gsx$orderdispatched.$t,
+                "Shipped": data.feed.entry[i].gsx$ordershipped.$t
+               
             };
             jsonDataObject.push(json_data);
                 
             for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)));
+                var presentIcon;
+                if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
+           presentIcon = redIcon;
+          }
+        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
+          presentIcon = yellowIcon;
+          }
+        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
+          presentIcon = greenIcon;
+          }
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{icon : presentIcon});
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
                 });
@@ -123,7 +166,7 @@
     var jsonDataObject =[];
     var graph_arr = [['Order ID', 'Time Taken', { role: 'style' }]];
     var bar_color = [];
-    $.getJSON('https://docs.google.com/spreadsheets/d/e/2PACX-1vS_af-vAnLP0f1C1FXc3IWnVzXHfY7irR8H14R2Rn7aBtsY8ZbUg4pDqjxsdhWeT_HU80OHF7t4AcNP/pubhtml', function(data) {
+    $.getJSON('https://spreadsheets.google.com/feeds/list/1zWy7X9VkwPYFpyQpJbS0bbLjtGWcHVMt7v-PyX5gYfk/1/public/full?alt=json', function(data) {
       for (var i = 0; i < data.feed.entry.length; ++i) {
         var json_data = {
           "OderID" : data.feed.entry[i].gsx$orderid.$t,
@@ -180,8 +223,8 @@
                 <th>Priority</th>
                 <th>Quantity</th>
                 <th>City</th>
-		<th>Dispatched</th>
-		<th>Shipped</th>		
+	        	<th>Dispatched</th>
+		       <th>Shipped</th>		
             </tr>
             <tbody id="tableContent">
             </tbody>
@@ -219,8 +262,8 @@
                         	  '</td><td>' + data.feed.entry[i].gsx$priority.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$quantity.$t + 
                         	  '</td><td>'  + data.feed.entry[i].gsx$city.$t +
-			          '</td><td>'  + data.feed.entry[i].gsx$Orderdispatched.$t +
-			          '</td><td>'  + data.feed.entry[i].gsx$Ordershipped.$t +
+			          '</td><td>'  + data.feed.entry[i].gsx$orderdispatched.$t +
+			          '</td><td>'  + data.feed.entry[i].gsx$ordershipped.$t +
                         	  '</td></tr>';
 
                 }
