@@ -104,14 +104,14 @@ var yellowIcon = new L.Icon({
             for (var j = 0; j < jsonDataObject.length; j++) {
                 var presentIcon;
                 if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
-           presentIcon = redIcon;
-          }
-        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
-          presentIcon = yellowIcon;
-          }
-        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
-          presentIcon = greenIcon;
-          }
+           		presentIcon = redIcon;
+          		}
+        	else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
+          		presentIcon = yellowIcon;
+          		}
+        	else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
+          		presentIcon = greenIcon;
+          		}
                 var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{icon : presentIcon});
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
@@ -217,20 +217,21 @@ var yellowIcon = new L.Icon({
    		<center>
 		<h2 style="color:white;"><u><b>Order Table</b></u></h2>
 		<table id="table1" border='20'style="width: 90%; height: 180px;">
-			<tr style="color:white;">
-                <th>Order ID</th>
-                <th>Item</th>
-                <th>Priority</th>
-                <th>Quantity</th>
-                <th>City</th>
+		<tr style="color:gold;">
+                	<th>Order ID</th>
+                	<th>Item</th>
+                	<th>Priority</th>
+                	<th>Quantity</th>
+                	<th>City</th>
 	        	<th>Dispatched</th>
-		       <th>Shipped</th>		
-            </tr>
+			<th>Shipped</th>		
+            	</tr>
             <tbody id="tableContent">
             </tbody>
-        </table></center>
-
-        <hr style="height:5px;border-width:5;color:yellow;background-color:red">
+        </table>
+	</center>
+	<br><br><br><br>
+        <hr style="height:10px;border-width:5;color:yellow;background-color:red">
 
 </body>
 
