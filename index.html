@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html>
 <head>
     <title>Vargi-Bots</title>
-
     <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""
   	/>
-
   	<script
     src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
@@ -24,13 +20,13 @@
         </div>
     </center>
 </header>a
+</header>
 <body background='https://images.squarespace-cdn.com/content/v1/59394df0bf629afcc7dd4bed/1503010573168-1QPOBHEAAWP6SN9I6WI6/ke17ZwdGBToddI8pDm48kB2qThcsGo8KlX0xCX5xL817gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UR_7C_D3iolpcC0vupphd7yaHSDrJLrfe7gK9DncrfuhhbgHIlOZnMbp8Juz_4NGyw/CircuitBackground_DARK.jpg'>
     <center>
-		<h1 style="color:red;">VB#0853 Warehouse Dashboard</h1>
+		<h1 style="color:white;">VB#0853 Warehouse Dashboard</h1>
 		<div id="map" style="width: 90%; height: 500px"></div>
 	</center>
 </body>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     /////////////Ajax Requests////////////
@@ -49,7 +45,6 @@ var redIcon = new L.Icon({
 	 iconAnchor: [12, 41],
 	 shadowSize: [41, 41]
         });
-
 var greenIcon = new L.Icon({
 	 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -57,7 +52,6 @@ var greenIcon = new L.Icon({
 	 iconAnchor: [12, 41],
 	 shadowSize: [41, 41]
 });
-
 var yellowIcon = new L.Icon({
 	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -66,49 +60,46 @@ var yellowIcon = new L.Icon({
 	popupAnchor: [1, -34],
 	shadowSize: [41, 41]
 });
-
-
-
+    
        function refreshMap(){
         var container = L.DomUtil.get('map');
-
       	if(container != null){
         container._leaflet_id = null;
         }
          
         var map = L.map('map').setView([20.5937, 78.9629], 4);
         var jsonDataObject =[];
-
-       function give_i(){
-    
-        if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
-            return redIcon;
-           }
-        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
-           return yellowIcon;
-           }
-        else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
-          return greenIcon;
-          }
-
-}
+       
         $.getJSON('https://spreadsheets.google.com/feeds/list/1zWy7X9VkwPYFpyQpJbS0bbLjtGWcHVMt7v-PyX5gYfk/1/public/full?alt=json', function(data) {
+    function give_i(jsonDataObject){
+    
+      
+}
         for (var i = 0; i < data.feed.entry.length; ++i) {
-
             var json_data = {
                 "City": data.feed.entry[i].gsx$city.$t,
                 "OderID" : data.feed.entry[i].gsx$orderid.$t,
                 "Item" : data.feed.entry[i].gsx$item.$t,
                 "Latitude": parseFloat(data.feed.entry[i].gsx$latitude.$t),
-                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t)
-                "Dispatched": data.feed.entry[i].gsx$orderdispatched.$t,
+                "Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t),
+                 "Dispatched": data.feed.entry[i].gsx$orderdispatched.$t,
                 "Shipped": data.feed.entry[i].gsx$ordershipped.$t
-                
+               
             };
             jsonDataObject.push(json_data);
                 
             for (var j = 0; j < jsonDataObject.length; j++) {
-                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{icon:give_i()});
+                var presentIcon;
+                if(jsonDataObject[j].Dispatched == 'No' && jsonDataObject[j].Shipped == 'No'){
+           		presentIcon = redIcon;
+          		}
+        	else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'No'){
+          		presentIcon = yellowIcon;
+          		}
+        	else if(jsonDataObject[j].Dispatched == 'Yes' && jsonDataObject[j].Shipped == 'Yes'){
+          		presentIcon = greenIcon;
+          		}
+                var marker = L.marker(L.latLng(parseFloat(jsonDataObject[j].Latitude), parseFloat(jsonDataObject[j].Longitude)),{icon : presentIcon});
                 marker.bindPopup(jsonDataObject[j].City, {
                         autoClose: false
                 });
@@ -124,27 +115,23 @@ var yellowIcon = new L.Icon({
                         .setContent("<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + marker.myJsonData.City +"</b>"+ "<b><br>Order ID: </b>" + marker.myJsonData.OderID + "<b><br>Item: </b>" +   marker.myJsonData.Item)
                         .openOn(map);
                     }
-
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map); 
                     
-
                 }
             }
         });
     }
-
 </script>
 <br><br><br><br>
-
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
 	<center>
-		<h2 style="color:white;"><u><b>Shipping Time Graph</b></u></h2>
+		<h2 style="color:grey;"><u><b>Shipping Time Graph</b></u></h2>
 		<div id="column_chart" style="width: 90%; height: 400px;"></div>
 	</center>
 </body>
@@ -157,7 +144,6 @@ var yellowIcon = new L.Icon({
   });
   google.charts.load("current", {packages:['corechart']});
   google.charts.setOnLoadCallback(refreshChart);
-
   function refreshChart(){
     var jsonDataObject =[];
     var graph_arr = [['Order ID', 'Time Taken', { role: 'style' }]];
@@ -184,7 +170,6 @@ var yellowIcon = new L.Icon({
           }
         bar_color.push(color)
       }
-
       // Converting Json Object to JavaScript Array
       for(var j in jsonDataObject){
           graph_arr.push([jsonDataObject[j].OderID,jsonDataObject[j].TimeTaken, bar_color[j]]);
@@ -192,7 +177,6 @@ var yellowIcon = new L.Icon({
       var graphArray_Final = google.visualization.arrayToDataTable(graph_arr);
     
       var data = new google.visualization.DataView(graphArray_Final); 
-
       var options = {
         title: 'Time Taken for items to be Shipped',
         hAxis: { title: 'Order ID'},
@@ -205,33 +189,30 @@ var yellowIcon = new L.Icon({
   }
 </script>
 <br><br><br><br>
-
 <head>
     <title>Vargi-Bots</title>
 </head>
 <body>
    		<center>
-		<h2 style="color:white;"><u><b>Order Table</b></u></h2>
+		<h2 style="color:grey;"><u><b>Order Table</b></u></h2>
 		<table id="table1" border='20'style="width: 90%; height: 180px;">
-			<tr style="color:white;">
-                <th>Order ID</th>
-                <th>Item</th>
-                <th>Priority</th>
-                <th>Quantity</th>
-                <th>City</th>
+		<tr style="color:gold;">
+                	<th>Order ID</th>
+                	<th>Item</th>
+                	<th>Priority</th>
+                	<th>Quantity</th>
+                	<th>City</th>
 	        	<th>Dispatched</th>
-		       <th>Shipped</th>		
-            </tr>
+			<th>Shipped</th>		
+            	</tr>
             <tbody id="tableContent">
             </tbody>
-        </table></center>
-
-        <hr style="height:5px;border-width:5;color:yellow;background-color:red">
-
+        </table>
+	</center>
+	<br><br><br><br>
+        <hr style="height:10px;border-width:5;color:yellow;background-color:red">
 </body>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
 <script>
     /////////////Ajax Requests////////////
     $(document).ready(function() {
@@ -249,10 +230,8 @@ var yellowIcon = new L.Icon({
         $.getJSON('https://spreadsheets.google.com/feeds/list/1zWy7X9VkwPYFpyQpJbS0bbLjtGWcHVMt7v-PyX5gYfk/1/public/full?alt=json', function(data) {
         	
             	var trHTML = '';
-
             	for (var i = 0; i < data.feed.entry.length; ++i) {
                 	var myData_map, myData_order;
-
                     trHTML += '<tr style="color:white;"><td>' + data.feed.entry[i].gsx$orderid.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$item.$t + 
                         	  '</td><td>' + data.feed.entry[i].gsx$priority.$t + 
@@ -261,13 +240,10 @@ var yellowIcon = new L.Icon({
 			          '</td><td>'  + data.feed.entry[i].gsx$orderdispatched.$t +
 			          '</td><td>'  + data.feed.entry[i].gsx$ordershipped.$t +
                         	  '</td></tr>';
-
                 }
-
                 console.log(trHTML);
         		$('#tableContent').html(trHTML);
         		var trHTML = '';
-
         	});	 
     }	
     
