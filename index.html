@@ -84,8 +84,10 @@
                 	<th>Item</th>
                 	<th>Priority</th>
                 	<th>Quantity</th>
-                	<th>City</th>
-					<th>Order Date and Time</th>
+                	<th>City</th>.
+					,<th>Order Date and Time</th>
+					<th>Dispatched</th>
+					<th>Shipped</th>
 					<th>Dispatch Date and Time</th>
 					<th>Shipping Date and Time</th>
 					<th>Time Taken (secs)</th>
@@ -251,6 +253,8 @@
 						  '</td><td>' + jsonDataObject[i].Quantity + 
 						  '</td><td>' + jsonDataObject[i].City +
 						  '</td><td>' + jsonDataObject[i].Order +
+						  '</td><td>' + jsonDataObject[i].Dispatched +
+						  '</td><td>' + jsonDataObject[i].Shipped +
 						  '</td><td>' + jsonDataObject[i].Dispatch +
 						  '</td><td>' + jsonDataObject[i].Shipping +
 						  '</td><td>' + jsonDataObject[i].TimeTaken +
@@ -308,6 +312,8 @@
 					"Order": data.feed.entry[i].gsx$orderdateandtime.$t,
 					"Dispatch": data.feed.entry[i].gsx$dispatchdateandtime.$t,
 					"Shipping": data.feed.entry[i].gsx$shippingdateandtime.$t,
+					"Shipped" : data.feed.entry[i].gsx$ordershipped.$t,
+					"Dispatched": data.feed.entry[i].gsx$orderdispatched.$t,
 					"TimeTaken": parseFloat(data.feed.entry[i].gsx$timetaken.$t),
 					"Priority": data.feed.entry[i].gsx$priority.$t,
 					"Quantity": data.feed.entry[i].gsx$quantity.$t,
