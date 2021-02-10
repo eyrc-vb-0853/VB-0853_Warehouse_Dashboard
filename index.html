@@ -155,15 +155,15 @@
                 
 				//Checking and allocating appropriate markers
 				var presentIcon;
-                if(jsonDataObject[j].Status == 'Not Dispatched')
+                                if(jsonDataObject[j].Status == "Not Dispatched")
 				{
 					presentIcon = redIcon;
           		}
-				else if(jsonDataObject[j].Status == 'Dispatched')
+				else if(jsonDataObject[j].Status == "Dispatched")
 				{
 					presentIcon = yellowIcon;
           		}
-				else if(jsonDataObject[j].Status == 'Shipped')
+				else if(jsonDataObject[j].Status == "Shipped")
 				{
 					presentIcon = greenIcon;
           		}
