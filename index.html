@@ -23,7 +23,7 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
 	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	
@@ -219,7 +219,7 @@
 		  // Converting Json Object to JavaScript Array
 		  for(var j in jsonDataObject)
 		  {
-			  graph_arr.push([jsonDataObject[j].OderID,jsonDataObject[j].TimeTaken, bar_color[j]]);
+			  graph_arr.push([jsonDataObject[j].OderID, jsonDataObject[j].TimeTaken, bar_color[j], jsonDataObject[j].TimeTaken]);
 		  }
 		  
 		  var graphArray_Final = google.visualization.arrayToDataTable(graph_arr);
@@ -277,7 +277,7 @@
 	
 		var jsonDataObject = [];
 		
-		var graph_arr = [['Order ID', 'Time Taken', { role: 'style' }]];
+		var graph_arr = [['Order ID', 'Time Taken', { role: 'style' } , { role: 'annotation' } ]];
 		var bar_color = [];
 		
 		var trHTML = '';
