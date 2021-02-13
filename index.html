@@ -82,8 +82,9 @@
                 	<th>Order ID</th>
                 	<th>Item</th>
                 	<th>Priority</th>
-                	<th>Quantity</th>
                 	<th>City</th>
+                	<th>Dispatched</th>
+					<th>Shipped</th>
 					<th>Order Date and Time</th>
 					<th>Dispatch Date and Time</th>
 					<th>Shipping Date and Time</th>
@@ -247,8 +248,9 @@
 				trHTML += '<tr style="color:white;"><td>' + jsonDataObject[i].OderID + 
 						  '</td><td>' + jsonDataObject[i].Item + 
 						  '</td><td>' + jsonDataObject[i].Priority + 
-						  '</td><td>' + jsonDataObject[i].Quantity + 
-						  '</td><td>' + jsonDataObject[i].City +
+						  '</td><td>' + jsonDataObject[i].City + 
+						  '</td><td>' + jsonDataObject[i].Dispatched +
+						  '</td><td>' + jsonDataObject[i].Shipped +
 						  '</td><td>' + jsonDataObject[i].Order +
 						  '</td><td>' + jsonDataObject[i].Dispatch +
 						  '</td><td>' + jsonDataObject[i].Shipping +
@@ -285,6 +287,7 @@
 			for (var i = 0; i < data.feed.entry.length; ++i) 
 			{
 				var status;
+					
 				if(data.feed.entry[i].gsx$orderdispatched.$t == 'No')
 					{
 						status = "Not Dispatched";
@@ -297,7 +300,6 @@
 					{
 						status = "Shipped";
 					}
-				
 				var json_data = {
 					"City": data.feed.entry[i].gsx$city.$t,
 					"OderID" : data.feed.entry[i].gsx$orderid.$t,
@@ -310,9 +312,10 @@
 					"TimeTaken": parseFloat(data.feed.entry[i].gsx$timetaken.$t),
 					"Priority": data.feed.entry[i].gsx$priority.$t,
 					"Quantity": data.feed.entry[i].gsx$quantity.$t,
+					"Dispatched": data.feed.entry[i].gsx$orderdispatched.$t,
+					"Shipped": data.feed.entry[i].gsx$ordershipped.$t,
 					"Status": status
-				   
-				};
+					};
 				
 				jsonDataObject.push(json_data);
 				
