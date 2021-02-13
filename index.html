@@ -42,7 +42,7 @@
     <center>
 		<!-- Setting Heading -->
 		<h1 style="color:white;">VB#0853 Warehouse Dashboard</h1>
-		<hr style="height:8px;border-width:50;color:black;background-color:teal">
+		<hr style="height:8px;border-width:5;color:black;background-color:teal">
 		
 		<!-- Setting Map Heading -->
 		<h2 style="color:lightsteelblue; font-family: 'Goldman', sans-serif; font-size: 40px;">
@@ -83,10 +83,8 @@
                 	<th>Item</th>
                 	<th>Priority</th>
                 	<th>Quantity</th>
-                	<th>City</th>.
-					,<th>Order Date and Time</th>
-					<th>Dispatched</th>
-					<th>Shipped</th>
+                	<th>City</th>
+					<th>Order Date and Time</th>
 					<th>Dispatch Date and Time</th>
 					<th>Shipping Date and Time</th>
 					<th>Time Taken (secs)</th>
@@ -98,7 +96,7 @@
 	<br><br><br><br>
 	
 		<!-- End Line -->
-        <hr style="height:3px;border-width:5;color:yellow;background-color:red">
+        <hr style="height:3px;border-width:5;color:red;background-color:red">
 </body>
 
 <script type="text/javascript">
@@ -154,15 +152,15 @@
                 
 				//Checking and allocating appropriate markers
 				var presentIcon;
-                                if(jsonDataObject[j].Status == "Not Dispatched")
+                if(jsonDataObject[j].Status == 'Not Dispatched')
 				{
 					presentIcon = redIcon;
           		}
-				else if(jsonDataObject[j].Status == "Dispatched")
+				else if(jsonDataObject[j].Status == 'Dispatched')
 				{
 					presentIcon = yellowIcon;
           		}
-				else if(jsonDataObject[j].Status == "Shipped")
+				else if(jsonDataObject[j].Status == 'Shipped')
 				{
 					presentIcon = greenIcon;
           		}
@@ -252,8 +250,6 @@
 						  '</td><td>' + jsonDataObject[i].Quantity + 
 						  '</td><td>' + jsonDataObject[i].City +
 						  '</td><td>' + jsonDataObject[i].Order +
-						  '</td><td>' + jsonDataObject[i].Dispatched +
-						  '</td><td>' + jsonDataObject[i].Shipped +
 						  '</td><td>' + jsonDataObject[i].Dispatch +
 						  '</td><td>' + jsonDataObject[i].Shipping +
 						  '</td><td>' + jsonDataObject[i].TimeTaken +
@@ -308,11 +304,9 @@
 					"Item" : data.feed.entry[i].gsx$item.$t,
 					"Latitude": parseFloat(data.feed.entry[i].gsx$latitude.$t),
 					"Longitude": parseFloat(data.feed.entry[i].gsx$longitude.$t),
-					"Order": data.feed.entry[i].gsx$orderdateandtime.$t,
-					"Dispatch": data.feed.entry[i].gsx$dispatchdateandtime.$t,
-					"Shipping": data.feed.entry[i].gsx$shippingdateandtime.$t,
-					"Shipped" : data.feed.entry[i].gsx$ordershipped.$t,
-					"Dispatched": data.feed.entry[i].gsx$orderdispatched.$t,
+					"Order": data.feed.entry[i].gsx$ordertime.$t,
+					"Dispatch": data.feed.entry[i].gsx$dispatchtime.$t,
+					"Shipping": data.feed.entry[i].gsx$shippingtime.$t,
 					"TimeTaken": parseFloat(data.feed.entry[i].gsx$timetaken.$t),
 					"Priority": data.feed.entry[i].gsx$priority.$t,
 					"Quantity": data.feed.entry[i].gsx$quantity.$t,
